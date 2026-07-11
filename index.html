@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>🎉 The Legend Has Survived Another Year 🎉</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400..700&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ============ CUSTOMIZE HERE ============ */
+  :root{
+    --pink:#ff3ea5;
+    --purple:#7b2ff7;
+    --cyan:#00e5ff;
+    --yellow:#ffd93d;
+    --navy:#140a2b;
+    --navy2:#1e0f3d;
+    --white:#fffaf5;
+  }
+
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:'Poppins', sans-serif;
+    background: radial-gradient(circle at 20% 10%, #2a1450 0%, var(--navy) 45%, #0d0620 100%);
+    color:var(--white);
+    overflow-x:hidden;
+    position:relative;
+    min-height:100vh;
+  }
+  h1,h2,h3, .display{ font-family:'Fredoka', sans-serif; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; }
+  }
+
+  /* -------- background ambience -------- */
+  #bg-canvas{ position:fixed; inset:0; z-index:0; pointer-events:none; }
+  .glow{
+    position:fixed; border-radius:50%; filter:blur(90px); opacity:0.35; z-index:0; pointer-events:none;
+  }
+  .glow1{ width:420px; height:420px; background:var(--pink); top:-100px; left:-100px; }
+  .glow2{ width:380px; height:380px; background:var(--cyan); bottom:-120px; right:-80px; }
+  .glow3{ width:300px; height:300px; background:var(--yellow); top:40%; left:60%; }
+
+  section{ position:relative; z-index:2; padding:90px 20px; max-width:900px; margin:0 auto; }
+
+  /* -------- balloons -------- */
+  .balloon-field{ position:fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden; }
+  .balloon{
+    position:absolute; bottom:-200px; width:60px; height:76px; border-radius:50% 50% 50% 50%/60% 60% 40% 40%;
+    opacity:0.9; animation:floatUp linear infinite; pointer-events:auto; cursor:pointer;
+    box-shadow: inset -8px -8px 18px rgba(0,0,0,0.15), inset 6px 6px 14px rgba(255,255,255,0.25);
+  }
+  .balloon::after{
+    content:''; position:absolute; bottom:-14px; left:50%; width:2px; height:20px; background:rgba(255,255,255,0.4); transform:translateX(-50%);
+  }
+  @keyframes floatUp{
+    0%{ transform:translateY(0) translateX(0) rotate(-4deg); }
+    50%{ transform:translateY(-55vh) translateX(30px) rotate(4deg); }
+    100%{ transform:translateY(-115vh) translateX(-20px) rotate(-4deg); }
+  }
+  .pop-msg{
+    position:absolute; font-family:'Fredoka',sans-serif; font-weight:700; color:var(--yellow);
+    font-size:0.95rem; text-shadow:0 2px 8px rgba(0,0,0,0.6); pointer-events:none;
+    animation:popFade 1.1s ease-out forwards; white-space:nowrap; z-index:5;
+  }
+  @keyframes popFade{
+    0%{ opacity:0; transform:translateY(0) scale(0.5); }
+    20%{ opacity:1; transform:translateY(-10px) scale(1.1); }
+    100%{ opacity:0; transform:translateY(-60px) scale(1); }
+  }
+
+  /* -------- confetti canvas -------- */
+  #confetti-canvas{ position:fixed; inset:0; z-index:50; pointer-events:none; }
+
+  /* -------- nav / eyebrow -------- */
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.18); padding:6px 16px; border-radius:999px; font-size:0.8rem;
+    letter-spacing:0.08em; text-transform:uppercase; backdrop-filter:blur(6px);
+  }
+
+  /* -------- hero -------- */
+  .hero{ text-align:center; padding-top:70px; }
+  .hero h1{
+    font-size:clamp(2.4rem, 8vw, 5.2rem); font-weight:700; line-height:1.05; margin:22px 0 10px;
+    background:linear-gradient(90deg, var(--pink), var(--yellow) 45%, var(--cyan));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    background-size:300% auto; animation:hue 6s linear infinite, wobble 3.2s ease-in-out infinite;
+    text-shadow:0 0 60px rgba(255,62,165,0.25);
+  }
+  @keyframes hue{ to{ background-position:300% center; } }
+  @keyframes wobble{ 0%,100%{ transform:rotate(-1deg);} 50%{ transform:rotate(1deg);} }
+  .hero .sub{ font-size:clamp(1rem,2.6vw,1.3rem); color:#ffe9d6; max-width:560px; margin:0 auto 34px; opacity:0.92; }
+
+  .btn{
+    font-family:'Fredoka',sans-serif; font-weight:600; font-size:1.15rem; border:none; cursor:pointer;
+    padding:18px 40px; border-radius:999px; color:var(--navy);
+    background:linear-gradient(135deg, var(--yellow), var(--pink));
+    box-shadow:0 10px 30px rgba(255,62,165,0.4), 0 0 0 4px rgba(255,255,255,0.08) inset;
+    transition:transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .btn:hover{ transform:translateY(-3px) scale(1.04); box-shadow:0 16px 40px rgba(255,217,61,0.5); }
+  .btn:active{ transform:scale(0.95) rotate(-2deg); }
+  .btn-outline{
+    background:transparent; color:var(--white); border:2px solid rgba(255,255,255,0.35);
+    box-shadow:none; padding:14px 30px; font-size:1rem;
+  }
+  .btn-outline:hover{ border-color:var(--cyan); color:var(--cyan); }
+
+  /* -------- glass card -------- */
+  .card{
+    background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.14);
+    border-radius:24px; padding:26px; backdrop-filter:blur(14px);
+    box-shadow:0 8px 30px rgba(0,0,0,0.25);
+  }
+  .section-title{
+    font-size:clamp(1.6rem,4vw,2.4rem); text-align:center; margin-bottom:8px;
+    color:var(--white);
+  }
+  .section-sub{ text-align:center; color:#c9b8f0; margin-bottom:36px; font-size:0.95rem; }
+
+  /* -------- age detector -------- */
+  .detector{ text-align:center; }
+  .scanner{
+    font-family:'Fredoka',sans-serif; font-size:1.1rem; padding:22px; border-radius:18px; margin-top:18px;
+    background:repeating-linear-gradient(135deg, rgba(255,62,165,0.15), rgba(255,62,165,0.15) 10px, rgba(0,0,0,0.15) 10px, rgba(0,0,0,0.15) 20px);
+    border:2px dashed var(--pink); color:var(--yellow);
+  }
+  .scanner.error{ animation:glitch 0.25s infinite; }
+  @keyframes glitch{
+    0%{ transform:translate(0,0); } 20%{ transform:translate(-2px,1px); } 40%{ transform:translate(2px,-1px);} 60%{transform:translate(-1px,2px);} 80%{transform:translate(1px,-2px);} 100%{transform:translate(0,0);}
+  }
+  .counter-num{
+    font-family:'Fredoka',sans-serif; font-size:3.4rem; color:var(--cyan); text-shadow:0 0 20px rgba(0,229,255,0.5);
+  }
+
+  /* -------- compliments / roasts grid -------- */
+  .grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:16px; margin-top:20px; }
+  .pill{
+    text-align:center; padding:18px 14px; font-weight:600; font-family:'Fredoka',sans-serif;
+    border-radius:16px; transition:transform 0.2s ease;
+  }
+  .pill:hover{ transform:translateY(-4px) rotate(-1deg); }
+  .pill:nth-child(4n+1){ background:linear-gradient(135deg,#ff3ea5,#7b2ff7); }
+  .pill:nth-child(4n+2){ background:linear-gradient(135deg,#00e5ff,#7b2ff7); }
+  .pill:nth-child(4n+3){ background:linear-gradient(135deg,#ffd93d,#ff3ea5); color:var(--navy); }
+  .pill:nth-child(4n+4){ background:linear-gradient(135deg,#7b2ff7,#00e5ff); }
+
+  .reveal-box{
+    text-align:center; margin-top:22px; min-height:70px; display:flex; align-items:center; justify-content:center;
+    font-family:'Fredoka',sans-serif; font-size:1.2rem; color:var(--yellow); padding:0 10px;
+  }
+
+  /* -------- stats -------- */
+  .stat-row{ margin-bottom:18px; }
+  .stat-label{ display:flex; justify-content:space-between; font-family:'Fredoka',sans-serif; margin-bottom:6px; }
+  .bar{ width:100%; height:16px; border-radius:999px; background:rgba(255,255,255,0.1); overflow:hidden; }
+  .bar-fill{ height:100%; border-radius:999px; background:linear-gradient(90deg,var(--pink),var(--yellow),var(--cyan)); background-size:200% auto; animation:hue 3s linear infinite; width:0%; transition:width 1.4s cubic-bezier(.2,.9,.3,1.2); }
+
+  /* -------- mini games -------- */
+  .game-area{ position:relative; height:260px; border-radius:18px; overflow:hidden; background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); border:1px solid rgba(255,255,255,0.12); }
+  .cake-emoji{ position:absolute; font-size:2.2rem; cursor:pointer; user-select:none; transition:top 0.05s linear; }
+  .basket{ position:absolute; bottom:8px; font-size:2.4rem; left:50%; transform:translateX(-50%); }
+  .score-line{ display:flex; justify-content:space-between; align-items:center; margin-top:12px; font-family:'Fredoka',sans-serif; }
+
+  .giftbox{ text-align:center; cursor:pointer; font-size:5rem; user-select:none; transition:transform 0.15s ease; }
+  .giftbox:hover{ transform:scale(1.08) rotate(-3deg); }
+  .giftbox:active{ transform:scale(0.9) rotate(6deg); }
+  .joke-box{ text-align:center; margin-top:14px; font-family:'Fredoka',sans-serif; font-size:1.05rem; min-height:50px; color:var(--cyan); }
+
+  /* -------- birthday arcade -------- */
+  .birthday-arcade{ margin-top:20px; }
+  .arcade-intro{ text-align:center; margin-bottom:22px; }
+  .arcade-intro h2{ margin-bottom:8px; }
+  .arcade-intro p{ max-width:740px; margin:0 auto; color:#e9d8ff; }
+  .arcade-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:18px; }
+  .arcade-card{ background:linear-gradient(145deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06)); border:1px solid rgba(255,255,255,0.16); border-radius:22px; padding:16px; box-shadow:0 10px 30px rgba(0,0,0,0.24); display:flex; flex-direction:column; gap:12px; }
+  .arcade-card-header{ display:flex; justify-content:space-between; align-items:flex-start; gap:8px; }
+  .arcade-card-header h3{ margin:0; font-size:1.05rem; font-family:'Fredoka',sans-serif; }
+  .arcade-card-header p{ margin:4px 0 0; font-size:0.85rem; color:#f4d9ff; }
+  .score-pill{ background:rgba(0,0,0,0.25); padding:8px 10px; border-radius:999px; font-size:0.8rem; white-space:nowrap; }
+  .tutorial-box{ background:rgba(0,0,0,0.2); border-left:3px solid var(--cyan); border-radius:12px; padding:10px 12px; font-size:0.9rem; color:#f8f3ff; }
+  .arcade-play-area{ position:relative; min-height:190px; border-radius:16px; overflow:hidden; background:linear-gradient(180deg, rgba(0,0,0,0.22), rgba(255,255,255,0.04)); border:1px solid rgba(255,255,255,0.16); display:flex; align-items:center; justify-content:center; padding:12px; }
+  .arcade-play-area .game-emoji{ font-size:2.2rem; filter:drop-shadow(0 4px 16px rgba(0,0,0,0.25)); }
+  .arcade-play-area .hero-emoji{ font-size:3rem; position:absolute; bottom:16px; left:50%; transform:translateX(-50%); }
+  .arcade-status{ display:flex; flex-wrap:wrap; gap:8px; font-size:0.83rem; }
+  .status-chip{ background:rgba(255,255,255,0.08); padding:7px 10px; border-radius:999px; }
+  .dialogue{ min-height:52px; font-size:0.95rem; color:var(--yellow); font-weight:600; text-align:center; }
+  .achievements{ display:flex; flex-wrap:wrap; gap:8px; min-height:28px; }
+  .arch-badge{ font-size:0.8rem; padding:6px 8px; border-radius:999px; background:rgba(255,255,255,0.1); }
+  .arcade-controls{ display:flex; gap:8px; flex-wrap:wrap; }
+  .arcade-btn{ border:none; border-radius:999px; padding:10px 14px; font-family:'Fredoka',sans-serif; font-weight:600; cursor:pointer; background:linear-gradient(135deg, var(--pink), var(--yellow)); color:var(--navy); }
+  .arcade-btn.alt{ background:transparent; color:var(--white); border:1px solid rgba(255,255,255,0.25); }
+  .arcade-btn:active{ transform:scale(0.96); }
+  .arcade-particle{ position:absolute; pointer-events:none; font-size:1.15rem; animation:arcadePop 0.8s ease-out forwards; }
+  @keyframes arcadePop{ 0%{ transform:translate(0,0) scale(0.5); opacity:1;} 100%{ transform:translate(var(--x), var(--y)) scale(1.3); opacity:0; } }
+  .arcade-progress{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0.18), transparent); display:flex; align-items:flex-end; justify-content:center; padding:8px; }
+  .arcade-progress span{ display:block; background:rgba(255,255,255,0.16); border-radius:999px; padding:6px 10px; font-size:0.8rem; }
+  .arcade-input{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  .arcade-input button{ flex:1; }
+  .tiny{ font-size:0.75rem; opacity:0.85; }
+
+  .photo-wrap{ text-align:center; }
+  .photo-circle{
+    width:170px; height:170px; border-radius:50%; margin:0 auto; display:flex; align-items:center; justify-content:center;
+    font-size:5rem; background:linear-gradient(135deg,var(--pink),var(--purple),var(--cyan)); cursor:pointer;
+    border:4px solid rgba(255,255,255,0.3); box-shadow:0 10px 40px rgba(123,47,247,0.4); transition:transform 0.6s ease;
+  }
+  .spin{ animation:spinIt 0.8s ease-in-out; }
+  @keyframes spinIt{ to{ transform:rotate(720deg); } }
+
+  /* -------- countdown -------- */
+  .countdown-wrap{ text-align:center; }
+  .countdown-grid{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-top:20px; }
+  .cbox{ background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:16px; padding:16px 20px; min-width:80px; }
+  .cbox .n{ font-family:'Fredoka',sans-serif; font-size:2rem; color:var(--yellow); }
+  .cbox .l{ font-size:0.75rem; text-transform:uppercase; letter-spacing:0.08em; color:#c9b8f0; }
+
+  /* -------- finale -------- */
+  .finale{ text-align:center; padding-bottom:120px; }
+  .finale h2{ font-size:clamp(2rem,7vw,3.6rem); background:linear-gradient(90deg,var(--yellow),var(--pink),var(--cyan)); -webkit-background-clip:text; background-clip:text; color:transparent; background-size:300% auto; animation:hue 5s linear infinite; }
+  .finale p{ max-width:520px; margin:14px auto 30px; color:#ffe9d6; font-size:1.05rem; }
+
+  footer{ text-align:center; padding:30px; color:#8a76b5; font-size:0.8rem; position:relative; z-index:2; }
+
+  ::selection{ background:var(--pink); color:white; }
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+<canvas id="confetti-canvas"></canvas>
+<div class="glow glow1"></div>
+<div class="glow glow2"></div>
+<div class="glow glow3"></div>
+<div class="balloon-field" id="balloonField"></div>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero">
+  <span class="eyebrow">🏆 Breaking News</span>
+  <h1>🎉 HAPPY BIRTHDAY, <span id="nameSlot">LEGEND</span>! 🎉</h1>
+  <p class="sub">Congratulations! You've successfully avoided becoming a fossil for another year.</p>
+  <button class="btn" id="celebrateBtn">🎊 CELEBRATE</button>
+</section>
+
+<!-- ===================== AGE DETECTOR / COUNTER ===================== -->
+<section>
+  <div class="card detector">
+    <h2 class="section-title">🕵️ Official Age Detector</h2>
+    <p class="section-sub">State-of-the-art scientific technology. 100% accurate. Trust the process.</p>
+    <button class="btn btn-outline" id="scanBtn">Scan Now</button>
+    <div class="scanner" id="scannerResult" style="display:none;">⚠️ ERROR: Age exceeds system limitations.</div>
+
+    <div style="margin-top:40px;">
+      <div class="counter-num" id="chaosCounter">0</div>
+      <div style="font-family:'Fredoka',sans-serif; color:#c9b8f0;">Years of causing chaos</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== COMPLIMENTS ===================== -->
+<section>
+  <h2 class="section-title">💅 Certified Titles</h2>
+  <p class="section-sub">Awarded by absolutely no official committee whatsoever.</p>
+  <div class="grid" id="complimentsGrid"></div>
+</section>
+
+<!-- ===================== SECRET REVEAL ===================== -->
+<section>
+  <div class="card" style="text-align:center;">
+    <h2 class="section-title">🔮 The Secret File</h2>
+    <p class="section-sub">Classified information. Declassifying on click.</p>
+    <button class="btn" id="revealBtn">Reveal Secret</button>
+    <div class="reveal-box" id="revealBox">Tap to expose the truth...</div>
+  </div>
+</section>
+
+<!-- ===================== ROASTS ===================== -->
+<section>
+  <h2 class="section-title">🔥 The Roast Zone</h2>
+  <p class="section-sub">Said with love. Mostly.</p>
+  <div class="grid" id="roastGrid"></div>
+</section>
+
+<!-- ===================== STATS ===================== -->
+<section>
+  <div class="card">
+    <h2 class="section-title">📊 Official Birthday Stats</h2>
+    <div style="margin-top:24px;" id="statsWrap"></div>
+  </div>
+</section>
+
+<!-- ===================== GAMES ===================== -->
+<section>
+  <div class="birthday-arcade">
+    <div class="arcade-intro">
+      <h2 class="section-title">🎮 Birthday Arcade</h2>
+      <p>Welcome to a chaotic, colorful lineup of Filipino-inspired mini-games: quick reflexes, ridiculous luck, and enough family drama to fill a barangay meeting.</p>
+    </div>
+    <div class="arcade-grid" id="arcadeGrid"></div>
+  </div>
+
+  <div class="card photo-wrap" style="margin-top:24px;">
+    <h3 style="font-family:'Fredoka',sans-serif; margin-top:0;">📸 The Birthday Photo</h3>
+    <div class="photo-circle" id="photoCircle">
+      <img src="assets/image.jpg" alt="Birthday Photo" height="190" width="150" style="border-radius:50%;">
+    </div>
+    <p class="section-sub" style="margin-top:14px;">(click to spin the legend)</p>
+  </div>
+</section>
+
+<!-- ===================== COUNTDOWN ===================== -->
+<section class="countdown-wrap">
+  <h2 class="section-title">⏳ Countdown to Next Complaint</h2>
+  <p class="section-sub">Time remaining until you're legally allowed to complain about being old again.</p>
+  <div class="countdown-grid" id="countdownGrid"></div>
+</section>
+
+<!-- ===================== FINALE ===================== -->
+<section class="finale">
+  <h2>🎂 Happy Birthday, <span class="finaleName">LEGEND</span>!</h2>
+  <p>May your Wi-Fi stay fast, your phone stay charged, your food stay free, and your problems remain as imaginary as your New Year's resolutions.</p>
+  <button class="btn" id="finaleBtn">🎆 One More Celebration</button>
+</section>
+
+<footer>Made with chaos, cake, and questionable amounts of glitter. 🎉</footer>
+
+<audio id="popSound" preload="auto">
+  <source src="data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQ==" type="audio/wav">
+</audio>
+<audio id="bgMusic" preload="auto" loop style="display:none;">
+  <source src="assets/i%20would%20like%20to%20greet%20to%20the%20happy%20birthday.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+/* ===================== CONFIG ===================== */
+const CONFIG = {
+  name: "LEGEND",     // <-- put the birthday person's name here
+  years: 25           // <-- put their age here
+};
+document.getElementById('nameSlot').textContent = CONFIG.name;
+document.querySelectorAll('.finaleName').forEach(el => el.textContent = CONFIG.name);
+
+/* ===================== SIMPLE WEBAUDIO SFX (no external files) ===================== */
+let actx;
+function beep(freq=440, dur=0.12, type='sine', vol=0.15){
+  try{
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    const o = actx.createOscillator();
+    const g = actx.createGain();
+    o.type = type; o.frequency.value = freq;
+    g.gain.value = vol;
+    o.connect(g); g.connect(actx.destination);
+    o.start();
+    g.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + dur);
+    o.stop(actx.currentTime + dur + 0.02);
+  }catch(e){}
+}
+function funHonk(){ beep(220,0.08,'sawtooth',0.12); setTimeout(()=>beep(160,0.12,'sawtooth',0.1),80); }
+function popSfx(){ beep(600,0.06,'square',0.08); }
+function tada(){ [523,659,784,1046].forEach((f,i)=> setTimeout(()=>beep(f,0.18,'triangle',0.12), i*90)); }
+
+/* ===================== BACKGROUND MUSIC ===================== */
+const bgMusic = document.getElementById('bgMusic');
+let bgMusicStarted = false;
+
+function startBackgroundMusic(){
+  if (bgMusicStarted || !bgMusic) return;
+  bgMusicStarted = true;
+
+  try {
+    bgMusic.volume = 0.3;
+    bgMusic.currentTime = 0;
+    const playPromise = bgMusic.play();
+
+    if (playPromise && typeof playPromise.then === 'function') {
+      playPromise.catch(() => {});
+    }
+  } catch (e) {}
+}
+
+['pointerdown', 'touchstart', 'click'].forEach(eventName => {
+  document.addEventListener(eventName, startBackgroundMusic, { once: true });
+});
+window.addEventListener('focus', startBackgroundMusic);
+window.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') startBackgroundMusic();
+});
+startBackgroundMusic();
+
+/* ===================== CONFETTI ENGINE ===================== */
+const cCanvas = document.getElementById('confetti-canvas');
+const cCtx = cCanvas.getContext('2d');
+function resizeCanvas(){ cCanvas.width = innerWidth; cCanvas.height = innerHeight; }
+resizeCanvas(); addEventListener('resize', resizeCanvas);
+
+let confettiParticles = [];
+const colors = ['#ff3ea5','#7b2ff7','#00e5ff','#ffd93d','#ffffff'];
+
+function spawnConfetti(count=140, originX=null, originY=null){
+  for(let i=0;i<count;i++){
+    confettiParticles.push({
+      x: originX ?? Math.random()*cCanvas.width,
+      y: originY ?? -20 - Math.random()*100,
+      w: 6+Math.random()*6,
+      h: 8+Math.random()*10,
+      color: colors[Math.floor(Math.random()*colors.length)],
+      speedY: 2+Math.random()*4,
+      speedX: -2+Math.random()*4,
+      rot: Math.random()*360,
+      rotSpeed: -8+Math.random()*16,
+      shape: Math.random()>0.5 ? 'rect':'circle',
+      life: 0,
+      maxLife: 200+Math.random()*150
+    });
+  }
+}
+
+function animateConfetti(){
+  cCtx.clearRect(0,0,cCanvas.width,cCanvas.height);
+  confettiParticles.forEach(p=>{
+    p.x += p.speedX; p.y += p.speedY; p.speedY += 0.02; p.rot += p.rotSpeed; p.life++;
+    cCtx.save();
+    cCtx.translate(p.x,p.y); cCtx.rotate(p.rot*Math.PI/180);
+    cCtx.fillStyle = p.color;
+    cCtx.globalAlpha = Math.max(0, 1 - p.life/p.maxLife);
+    if(p.shape==='rect'){ cCtx.fillRect(-p.w/2,-p.h/2,p.w,p.h); }
+    else{ cCtx.beginPath(); cCtx.arc(0,0,p.w/2,0,Math.PI*2); cCtx.fill(); }
+    cCtx.restore();
+  });
+  confettiParticles = confettiParticles.filter(p => p.life < p.maxLife && p.y < cCanvas.height+50);
+  requestAnimationFrame(animateConfetti);
+}
+animateConfetti();
+
+/* Fireworks burst */
+function fireworkBurst(x,y){
+  for(let i=0;i<60;i++){
+    const angle = (Math.PI*2)*(i/60);
+    const speed = 3+Math.random()*4;
+    confettiParticles.push({
+      x, y, w:5, h:5,
+      color: colors[Math.floor(Math.random()*colors.length)],
+      speedY: Math.sin(angle)*speed,
+      speedX: Math.cos(angle)*speed,
+      rot: Math.random()*360, rotSpeed:-10+Math.random()*20,
+      shape:'circle', life:0, maxLife:80+Math.random()*40
+    });
+  }
+}
+
+/* ===================== BALLOONS ===================== */
+const balloonField = document.getElementById('balloonField');
+const balloonColors = ['#ff3ea5','#7b2ff7','#00e5ff','#ffd93d','#ff8fd6'];
+const wishes = ["May your cake outlive your diet 🎂","Wishing you infinite snacks 🍕","Stay weird, stay awesome ✨","New year, same chaos 🌀","May your naps be long 😴","Good vibes only today 🌈"];
+
+function spawnBalloon(){
+  if (!balloonField) return;
+  const b = document.createElement('div');
+  b.className = 'balloon';
+  const left = Math.random()*90 + 2;
+  const size = 38 + Math.random()*18;
+  const dur = 10 + Math.random()*6;
+  b.style.left = left+'vw';
+  b.style.width = size+'px';
+  b.style.height = (size*1.25)+'px';
+  b.style.background = balloonColors[Math.floor(Math.random()*balloonColors.length)];
+  b.style.animationDuration = dur+'s';
+  b.style.bottom = '-150px';
+  b.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    popSfx();
+    const rect = b.getBoundingClientRect();
+    spawnConfetti(20, rect.left+rect.width/2, rect.top+rect.height/2);
+    const msg = document.createElement('div');
+    msg.className = 'pop-msg';
+    msg.textContent = wishes[Math.floor(Math.random()*wishes.length)];
+    msg.style.left = rect.left+'px';
+    msg.style.top = rect.top+'px';
+    document.body.appendChild(msg);
+    setTimeout(()=> msg.remove(), 1200);
+    b.remove();
+  });
+  b.addEventListener('animationend', ()=> b.remove());
+  balloonField.appendChild(b);
+}
+setInterval(spawnBalloon, 2600);
+for(let i=0;i<2;i++) setTimeout(spawnBalloon, i*800);
+
+/* ===================== HERO CELEBRATE BUTTON ===================== */
+document.getElementById('celebrateBtn').addEventListener('click', (e)=>{
+  tada();
+  const r = e.target.getBoundingClientRect();
+  spawnConfetti(180, r.left+r.width/2, r.top);
+  fireworkBurst(innerWidth/2, innerHeight*0.3);
+});
+
+/* ===================== AGE DETECTOR ===================== */
+document.getElementById('scanBtn').addEventListener('click', ()=>{
+  const box = document.getElementById('scannerResult');
+  box.style.display = 'block';
+  box.classList.add('error');
+  funHonk();
+  setTimeout(()=> box.classList.remove('error'), 600);
+});
+
+/* ===================== CHAOS COUNTER ===================== */
+(function animateCounter(){
+  const el = document.getElementById('chaosCounter');
+  let current = 0;
+  const target = CONFIG.years;
+  const step = Math.max(1, Math.ceil(target/40));
+  const int = setInterval(()=>{
+    current += step;
+    if(current >= target){ current = target; clearInterval(int); }
+    el.textContent = current;
+  }, 40);
+})();
+
+/* ===================== COMPLIMENTS ===================== */
+const compliments = [
+  "Certified Professional Napper 😴",
+  "CEO of Eating Free Cake 🍰",
+  "Master of Bad Decisions 🎯",
+  "World's Most Expensive Human to Feed 🍽️",
+  "Chief Meme Officer 📱",
+  "Snack Detection Specialist 🕵️‍♂️",
+  "Professional Overthinker 🧠",
+  "Wi-Fi Password Forgetter 📶"
+];
+const complimentsGrid = document.getElementById('complimentsGrid');
+compliments.forEach(c=>{
+  const d = document.createElement('div');
+  d.className = 'pill';
+  d.textContent = c;
+  complimentsGrid.appendChild(d);
+});
+
+/* ===================== SECRET REVEAL ===================== */
+const secrets = [
+  "Still acts like they're 12. 🧃",
+  "Runs on caffeine and luck. ☕",
+  "Can smell free food from 3 kilometers away. 👃",
+  "Has survived countless embarrassing moments. 😅",
+  "Definitely Googled 'how to adult' at least once. 💻",
+  "Secretly rehearses arguments in the shower. 🚿"
+];
+document.getElementById('revealBtn').addEventListener('click', ()=>{
+  const box = document.getElementById('revealBox');
+  box.style.opacity = 0;
+  popSfx();
+  setTimeout(()=>{
+    box.textContent = secrets[Math.floor(Math.random()*secrets.length)];
+    box.style.transition = 'opacity 0.3s ease';
+    box.style.opacity = 1;
+  }, 150);
+});
+
+/* ===================== ROASTS ===================== */
+const roasts = [
+  "Another year older, still no owner's manual. 📖",
+  "You aren't old... you're just vintage. 🍷",
+  "Your back now makes more sounds than your phone. 🔊",
+  "You're aging like fine milk... just kidding. 🥛",
+  "Your metabolism filed for early retirement. 🐌",
+  "You blink now and your knees narrate it. 🦵"
+];
+const roastGrid = document.getElementById('roastGrid');
+roasts.forEach(r=>{
+  const d = document.createElement('div');
+  d.className = 'pill';
+  d.textContent = r;
+  roastGrid.appendChild(d);
+});
+
+/* ===================== STATS ===================== */
+const stats = [
+  {label:'Cake Consumption', value:99},
+  {label:'Sleep Level', value:3},
+  {label:'Weirdness', value:100},
+  {label:'Life Skills', value:'Loading...'},
+  {label:'Luck', value:'Somehow Still Alive'}
+];
+const statsWrap = document.getElementById('statsWrap');
+stats.forEach(s=>{
+  const row = document.createElement('div');
+  row.className = 'stat-row';
+  const isNum = typeof s.value === 'number';
+  row.innerHTML = `
+    <div class="stat-label"><span>${s.label}</span><span>${isNum? s.value+'%': s.value}</span></div>
+    <div class="bar"><div class="bar-fill" data-target="${isNum? s.value : (s.label==='Life Skills'? 12 : 100)}"></div></div>
+  `;
+  statsWrap.appendChild(row);
+});
+const barObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.style.width = entry.target.dataset.target + '%';
+    }
+  });
+},{threshold:0.4});
+document.querySelectorAll('.bar-fill').forEach(b=> barObserver.observe(b));
+
+/* ===================== BIRTHDAY ARCADE ===================== */
+const arcadeGrid = document.getElementById('arcadeGrid');
+function addParticle(container, x, y, label='✨', color='var(--yellow)'){
+  const p = document.createElement('div');
+  p.className = 'arcade-particle';
+  p.textContent = label;
+  p.style.left = x + 'px';
+  p.style.top = y + 'px';
+  p.style.color = color;
+  p.style.setProperty('--x', (Math.random()*60 - 30) + 'px');
+  p.style.setProperty('--y', (Math.random()*-90 - 20) + 'px');
+  container.appendChild(p);
+  setTimeout(()=> p.remove(), 800);
+}
+
+function createArcadeCard(config){
+  const card = document.createElement('article');
+  card.className = 'arcade-card';
+  card.innerHTML = `
+    <div class="arcade-card-header">
+      <div>
+        <h3>${config.emoji} ${config.title}</h3>
+        <p>${config.description}</p>
+      </div>
+      <div class="score-pill">Score <b>0</b></div>
+    </div>
+    <div class="tutorial-box">${config.tutorial}</div>
+    <div class="arcade-play-area" id="${config.id}-play"></div>
+    <div class="arcade-status">
+      <span class="status-chip">Time <strong>0s</strong></span>
+      <span class="status-chip">Combo <strong>0x</strong></span>
+      <span class="status-chip">Best <strong>0</strong></span>
+    </div>
+    <div class="dialogue">${config.opening}</div>
+    <div class="achievements"></div>
+    <div class="arcade-controls">
+      <button class="arcade-btn start-btn">Start Game</button>
+      <button class="arcade-btn alt replay-btn">Play Again</button>
+    </div>
+  `;
+
+  const playArea = card.querySelector('.arcade-play-area');
+  const scoreEl = card.querySelector('.score-pill b');
+  const statusStrongEls = card.querySelectorAll('.arcade-status .status-chip strong');
+  const timeEl = statusStrongEls[0];
+  const comboEl = statusStrongEls[1];
+  const bestEl = statusStrongEls[2];
+  const dialogueEl = card.querySelector('.dialogue');
+  const achievementsEl = card.querySelector('.achievements');
+  const startBtn = card.querySelector('.start-btn');
+  const replayBtn = card.querySelector('.replay-btn');
+
+  let score = 0;
+  let combo = 0;
+  let best = 0;
+  let timer = 0;
+  let running = false;
+  let intervalId = null;
+  let timeoutId = null;
+  let cleanup = null;
+
+  function setScore(v){
+    score = typeof v === 'function' ? v(score) : v;
+    if(scoreEl) scoreEl.textContent = score;
+    if(score > best && bestEl) bestEl.textContent = best;
+  }
+  function setTimer(v){ timer=v; if(timeEl) timeEl.textContent = timer + 's'; }
+  function setCombo(v){
+    combo = typeof v === 'function' ? v(combo) : v;
+    if(comboEl) comboEl.textContent = combo + 'x';
+  }
+  function setDialogue(msg){ dialogueEl.textContent = msg; }
+  function setAchievements(list){ achievementsEl.innerHTML = list.map(a=>`<span class="arch-badge">${a}</span>`).join(''); }
+  function clearPlayArea(){ playArea.innerHTML=''; }
+
+  function stopGame(){
+    if(intervalId){ clearInterval(intervalId); intervalId=null; }
+    if(timeoutId){ clearTimeout(timeoutId); timeoutId=null; }
+    running = false;
+    startBtn.textContent='Start Game';
+    replayBtn.style.display='inline-block';
+    if(cleanup){ cleanup(); cleanup=null; }
+  }
+
+  function beginGame(){
+    if(running) return;
+    running = true;
+    startBtn.textContent='Playing...';
+    replayBtn.style.display='inline-block';
+    clearPlayArea();
+    setScore(0); setCombo(0); setTimer(config.time); setDialogue(config.opening); setAchievements([]);
+    const startedAt = Date.now();
+    intervalId = setInterval(()=>{
+      setTimer(Math.max(0, config.time - Math.floor((Date.now()-startedAt)/1000)));
+      if(Date.now()-startedAt >= config.time*1000){
+        stopGame();
+        const result = config.finish(score, combo, best);
+        setDialogue(result.message);
+        if(result.achievement){ setAchievements([result.achievement]); }
+        funHonk();
+      }
+    }, 250);
+    if(config.setup){ cleanup = config.setup({playArea, card, setScore, setCombo, setTimer, setDialogue, setAchievements, addParticle, beep, funHonk, tada}); }
+  }
+
+  startBtn.addEventListener('click', beginGame);
+  replayBtn.addEventListener('click', ()=>{ stopGame(); beginGame(); });
+  card.querySelector('.tutorial-box').style.display = 'block';
+
+  return card;
+}
+
+const games = [
+  {
+    id:'tumbang', title:'Tumbang Preso', emoji:'🩴', description:'Throw slippers at the can.', tutorial:'Tap the button to throw. Wind changes each round, so aim carefully and keep your combo alive.', opening:'Nanay borrowed your tsinelas. Good luck, champion.', time:12,
+    setup: ({playArea, setScore, setCombo, setDialogue, setAchievements, addParticle, beep}) => {
+      let wind = 0;
+      const can = document.createElement('div');
+      can.className='game-emoji';
+      can.textContent='🥫';
+      can.style.position='absolute';
+      can.style.left='50%';
+      can.style.top='24px';
+      can.style.transform='translateX(-50%)';
+      playArea.appendChild(can);
+      const throwBtn = document.createElement('button');
+      throwBtn.className='arcade-btn';
+      throwBtn.textContent='Throw Slipper';
+      const wrapper=document.createElement('div'); wrapper.className='arcade-input'; wrapper.appendChild(throwBtn); playArea.appendChild(wrapper);
+      wrapper.style.position='absolute'; wrapper.style.bottom='12px';
+      function newRound(){ wind = Math.floor(Math.random()*7)-3; setDialogue(`Wind: ${wind>0?'+':''}${wind} ${wind===0?'steady':'mood'}!`); }
+      newRound();
+      throwBtn.addEventListener('click', ()=>{
+        const hit = Math.abs(wind) < 2;
+        if(hit){
+          setScore((s)=>s+1); 
+          setCombo((c)=>c+1); 
+          setDialogue(['Perfect aim!','The can rolled away.','Barangay tanod distracted you.'][Math.floor(Math.random()*3)]);
+          addParticle(playArea, 140, 70, '🩴', 'var(--yellow)');
+          beep(700,0.08,'triangle',0.08);
+        } else {
+          setCombo(0); setDialogue(['Nanay borrowed your tsinelas.','The can rolled away.','Barangay tanod distracted you.'][Math.floor(Math.random()*3)]);
+          beep(180,0.08,'square',0.08);
+        }
+        if(Math.random()>0.65) newRound(); else if(Math.random()>0.7){ setDialogue('A kid from the next street cheered.'); }
+        if(score >= 5){ setAchievements(['Perfect Aim']); }
+        if(score >= 8){ setAchievements(['Barangay Champion','Tsinelas Sniper']); }
+      });
+      return ()=>{ throwBtn.remove(); wrapper.remove(); can.remove(); };
+    },
+    finish: (score, combo)=>({message: score>6 ? 'You made it look easy. The can fears you.' : 'The can escaped with its dignity.', achievement: score>6 ? 'Tsinelas Sniper' : 'Barangay Champion'})
+  },
+  {
+    id:'lumpia', title:'Agawan ng Lumpia', emoji:'🌯', description:'Click the lumpia before relatives steal it.', tutorial:'Tap the lumpia as fast as you can. The faster you click, the more dramatic the family drama.', opening:'Para sa bisita yan! Grab it before Tito does.', time:12,
+    setup: ({playArea, setScore, setCombo, setDialogue, setAchievements, addParticle, beep}) => {
+      let spawnTimer = null;
+      let current = null;
+      function spawn(){
+        if(current) current.remove();
+        current = document.createElement('button'); current.className='game-emoji'; current.textContent='🌯'; current.style.position='absolute'; current.style.left=Math.random()*70+'%'; current.style.top=Math.random()*60+'%'; current.style.border='none'; current.style.background='transparent'; current.style.cursor='pointer'; current.onclick=()=>{ setScore((s)=>s+1); setCombo((c)=>c+1); addParticle(playArea, 120, 80, '🌯', 'var(--pink)'); beep(560,0.06,'square',0.08); setDialogue(['Lumpia secured!','Last piece na!','May bagong refill!'][Math.floor(Math.random()*3)]); if(score>=4){ setAchievements(['Lumpia Protector']); } if(score>=7){ setAchievements(['Lumpia Addict','Buffet Predator']); } }; playArea.appendChild(current); }
+      spawn();
+      spawnTimer=setInterval(()=>{ if(Math.random()>0.45){ setDialogue(['Hungry Tito is circling.','Fast Tita grabbed one!','Lola is judging your speed.'][Math.floor(Math.random()*3)]); } spawn(); }, 900);
+      return ()=>{ clearInterval(spawnTimer); if(current) current.remove(); };
+    },
+    finish: (score)=>({message: score>5 ? 'The lumpia is safe and your relatives are offended.' : 'The buffet drama wins again.', achievement: score>5 ? 'Lumpia Protector' : 'Buffet Predator'})
+  },
+  {
+    id:'chicken', title:'Unli Chicken Challenge', emoji:'🍗', description:'Spam-click fried chicken before time runs out.', tutorial:'Mash the chicken button as fast as possible. Watch for bonus gravy and avoid the penalties.', opening:'Extra rice! Unlimited gravy! Eat fast before Tito steals your chicken.', time:12,
+    setup: ({playArea, setScore, setCombo, setDialogue, setAchievements, addParticle, beep, funHonk}) => {
+      const chicken = document.createElement('button'); chicken.className='game-emoji'; chicken.textContent='🍗'; chicken.style.border='none'; chicken.style.background='transparent'; chicken.style.cursor='pointer'; chicken.addEventListener('click', ()=>{ setScore((s)=>s+1); setCombo((c)=>c+1); addParticle(playArea, 80, 60, '🍗', 'var(--yellow)'); beep(430,0.05,'triangle',0.08); }); playArea.appendChild(chicken);
+      const eventTimer=setInterval(()=>{ const events=['Extra Rice','Unlimited Gravy','Softdrinks Combo','Busog Meter','Choking Warning','Tito stole your chicken']; const picked=events[Math.floor(Math.random()*events.length)]; setDialogue(picked); if(picked==='Extra Rice'){ setScore((s)=>s+2); } if(picked==='Unlimited Gravy'){ setCombo((c)=>c+2); } if(picked==='Tito stole your chicken'){ setCombo(0); setDialogue('Tito stole your chicken.'); } if(picked==='Busog Meter'){ setScore((s)=>Math.max(0,s-1)); } }, 1400);
+      return ()=> clearInterval(eventTimer);
+    },
+    finish: (score, combo)=>({message: score>8 ? 'You ate like a true Mang Inasal warrior.' : 'The chicken escaped you.', achievement: score>8 ? 'Chicken Survivor' : 'Mang Inasal Warrior'})
+  },
+  {
+    id:'dodge', title:'Dodge the Flying Tsinelas', emoji:'👡', description:'Survive the flying slippers and household weapons.', tutorial:'Move your finger or mouse around the play area to dodge the chaos.', opening:'ANGRY NANAY is coming. Helmet up, anak.', time:12,
+    setup: ({playArea, setScore, setCombo, setDialogue, setAchievements, addParticle, beep}) => {
+      const hero=document.createElement('div'); hero.className='hero-emoji'; hero.textContent='🧒'; hero.style.left='50%'; hero.style.bottom='12px'; playArea.appendChild(hero);
+      const objects=[];
+      let active = true;
+      playArea.addEventListener('pointermove', (e)=>{ const rect=playArea.getBoundingClientRect(); const x=e.clientX-rect.left; hero.style.left=Math.max(36, Math.min(86, x/rect.width*100))+'%'; });
+      const spawn = setInterval(()=>{ const obj=document.createElement('div'); obj.className='game-emoji'; obj.textContent=['👡','🔨','🪜','🧹'][Math.floor(Math.random()*4)]; obj.style.position='absolute'; obj.style.left=Math.random()*90+'%'; obj.style.top='-20px'; playArea.appendChild(obj); objects.push(obj); let y=0; const fall=setInterval(()=>{ if(!active) return; y+=6; obj.style.top=y+'px'; const heroRect=hero.getBoundingClientRect(); const objRect=obj.getBoundingClientRect(); if(heroRect.left < objRect.right && heroRect.right > objRect.left && heroRect.top < objRect.bottom && heroRect.bottom > objRect.top){ clearInterval(fall); obj.remove(); setCombo(0); setDialogue('Ow! That one hurt.'); beep(120,0.08,'square',0.08); } if(y>180){ clearInterval(fall); obj.remove(); } }, 25); }, 450);
+      const timer=setInterval(()=>{ setScore((s)=>s+1); setCombo((c)=>c+1); if(score>=5){ setAchievements(['Tsinelas Survivor']); } if(score>=9){ setAchievements(['Favorite Child','Untouchable']); } }, 700);
+      return ()=>{ active=false; clearInterval(spawn); clearInterval(timer); hero.remove(); objects.forEach(o=>o.remove()); };
+    },
+    finish: (score)=>({message: score>5 ? 'You survived the household weapons. Ang galing!' : 'The house won that round.', achievement: score>6 ? 'Untouchable' : 'Tsinelas Survivor'})
+  },
+  {
+    id:'rice', title:'Rice Clicker', emoji:'🍚', description:'Spam-click rice bowls to feed the carb monster.', tutorial:'Tap the bowl to gain rice and buy upgrades. Every upgrade makes the rice flood in faster.', opening:'Bottomless rice is the dream. Click it before Tito says “konti lang.”', time:15,
+    setup: ({playArea, setScore, setCombo, setDialogue, setAchievements, addParticle, beep}) => {
+      let auto=0; let multiplier=1;
+      const bowl=document.createElement('button'); bowl.className='game-emoji'; bowl.textContent='🍚'; bowl.style.border='none'; bowl.style.background='transparent'; bowl.style.cursor='pointer'; bowl.addEventListener('click', ()=>{ setScore((s)=>s+multiplier); setCombo((c)=>c+1); addParticle(playArea, 90, 80, '🍚', 'var(--cyan)'); beep(540,0.05,'sine',0.08); }); playArea.appendChild(bowl);
+      const upgradeBar=document.createElement('div'); upgradeBar.className='arcade-input'; upgradeBar.innerHTML='<button class="arcade-btn">Extra Rice</button><button class="arcade-btn alt">Bottomless Rice</button><button class="arcade-btn alt">Rice Factory</button>'; playArea.appendChild(upgradeBar);
+      upgradeBar.style.position='absolute'; upgradeBar.style.bottom='8px'; upgradeBar.style.width='calc(100% - 24px)'; upgradeBar.querySelectorAll('button')[0].addEventListener('click', ()=>{ if(score>=5){ setScore((s)=>s-5); multiplier+=1; setDialogue('Extra Rice unlocked!'); beep(650,0.06,'triangle',0.08); } else setDialogue('Kulang pa ang kanin.'); }); upgradeBar.querySelectorAll('button')[1].addEventListener('click', ()=>{ if(score>=12){ setScore((s)=>s-12); auto+=2; setDialogue('Bottomless Rice activated!'); } else setDialogue('Kulang pa ang budget para sa kanin.'); }); upgradeBar.querySelectorAll('button')[2].addEventListener('click', ()=>{ if(score>=25){ setScore((s)=>s-25); auto+=5; multiplier+=2; setDialogue('Rice Factory online!'); } else setDialogue('Rice Factory needs more coins.'); }); const autoTimer=setInterval(()=>{ if(auto){ setScore((s)=>s+auto); } }, 700);
+      return ()=> clearInterval(autoTimer);
+    },
+    finish: (score)=>({message: score>20 ? 'The rice empire is now yours.' : 'The bowl is empty. The carb dream fades.', achievement: score>20 ? 'Rice Monster' : 'Unlimited Kanin'})
+  },
+  {
+    id:'candles', title:'Blow the Candles', emoji:'🎂', description:'Blow the candles out before they relight.', tutorial:'Mash the Blow button rapidly. If the browser supports microphone input, it can help too.', opening:'The cake keeps getting bigger. You accidentally added more candles.', time:12,
+    setup: ({playArea, setScore, setCombo, setDialogue, setAchievements, addParticle, beep, funHonk}) => {
+      const candles=[document.createElement('div'),document.createElement('div'),document.createElement('div')]; candles.forEach((c,i)=>{ c.className='game-emoji'; c.textContent='🕯️'; c.style.position='absolute'; c.style.left=(20+i*25)+'%'; c.style.top='24px'; playArea.appendChild(c); }); const blowBtn=document.createElement('button'); blowBtn.className='arcade-btn'; blowBtn.textContent='Blow'; const wrapper=document.createElement('div'); wrapper.className='arcade-input'; wrapper.appendChild(blowBtn); playArea.appendChild(wrapper); wrapper.style.position='absolute'; wrapper.style.bottom='12px'; let blown=0; blowBtn.addEventListener('click', ()=>{ blown+=1; setScore((s)=>s+1); setCombo((c)=>c+1); addParticle(playArea, 100, 40, '💨', 'var(--cyan)'); beep(520,0.05,'sine',0.08); if(blown>=3){ setDialogue('Candles out!'); setAchievements(['Birthday Hero']); } }); return ()=>{};
+    },
+    finish: (score)=>({message: score>6 ? 'You extinguished the candles... but the cake grew bigger.' : 'The candles relit and mocked you.', achievement: score>6 ? 'Birthday Hero' : 'Cake Survivor'})
+  },
+  {
+    id:'excuse', title:'Excuse Generator', emoji:'🤥', description:'Generate excuses with a fake believability meter.', tutorial:'Press Generate Excuse to build your masterpiece. Higher believability means better drama.', opening:'Brownout? Traffic? Walang internet? This is your moment.', time:10,
+    setup: ({playArea, setScore, setCombo, setDialogue, setAchievements, addParticle, beep}) => {
+      const excuses=['Brownout.','Traffic.','Walang internet.','Nakatulog ako.','Kinain ng aso.','May fiesta.','May emergency.']; const meter=document.createElement('div'); meter.className='tutorial-box'; meter.textContent='Believability Meter: 0%'; playArea.appendChild(meter); const button=document.createElement('button'); button.className='arcade-btn'; button.textContent='Generate Excuse'; const wrapper=document.createElement('div'); wrapper.className='arcade-input'; wrapper.appendChild(button); playArea.appendChild(wrapper); wrapper.style.position='absolute'; wrapper.style.bottom='12px'; button.addEventListener('click', ()=>{ const excuse=excuses[Math.floor(Math.random()*excuses.length)]; const believable=Math.floor(Math.random()*100); meter.textContent=`${excuse} Believability: ${believable}%`; setScore((s)=>s+Math.round(believable/10)); setCombo((c)=>c+1); setDialogue('Your excuse has been filed under “totally believable.”'); if(believable>70){ setAchievements(['Master of Excuses']); } addParticle(playArea, 120, 80, '🗣️', 'var(--pink)'); beep(480,0.06,'triangle',0.08); }); return ()=>{};
+    },
+    finish: (score)=>({message: score>8 ? 'The boss bought it. Somehow.' : 'Even your own family called BS.', achievement: score>8 ? 'Master of Excuses' : 'Professional Pretender'})
+  },
+  {
+    id:'cash', title:'Ninong Cash Grab', emoji:'💸', description:'Catch falling cash before the bills ruin your day.', tutorial:'Move your basket to catch the money. Avoid the bills and taxes.', opening:'Money rains from above. Grab it while the ninong is still generous.', time:12,
+    setup: ({playArea, setScore, setCombo, setDialogue, setAchievements, addParticle, beep}) => {
+      const basket=document.createElement('div'); basket.className='hero-emoji'; basket.textContent='🧺'; basket.style.left='50%'; basket.style.bottom='8px'; playArea.appendChild(basket); playArea.addEventListener('pointermove', (e)=>{ const rect=playArea.getBoundingClientRect(); const x=e.clientX-rect.left; basket.style.left=Math.max(14, Math.min(86, x/rect.width*100))+'%'; }); const spawn = setInterval(()=>{ const item=document.createElement('div'); item.className='game-emoji'; item.textContent=['💵','💶','💴','📜'][Math.floor(Math.random()*4)]; item.style.position='absolute'; item.style.left=Math.random()*90+'%'; item.style.top='-20px'; playArea.appendChild(item); let y=0; const fall = setInterval(()=>{ y+=5; item.style.top=y+'px'; const bRect=basket.getBoundingClientRect(); const iRect=item.getBoundingClientRect(); if(bRect.left < iRect.right && bRect.right > iRect.left && bRect.top < iRect.bottom && bRect.bottom > iRect.top){ clearInterval(fall); item.remove(); setScore((s)=>s+10); setCombo((c)=>c+1); addParticle(playArea, 80, 40, '💸', 'var(--yellow)'); beep(700,0.04,'triangle',0.05); } if(y>180){ clearInterval(fall); item.remove(); } }, 25); }, 550); return ()=> clearInterval(spawn);
+    },
+    finish: (score)=>({message: score>40 ? 'The ninong loves you. Definitely.' : 'Taxes got you again.', achievement: score>40 ? 'Favorite ni Ninong' : 'Cash Collector'})
+  },
+  {
+    id:'buffet', title:'Filipino Buffet Simulator', emoji:'🍽', description:'Grab food before everyone else.', tutorial:'Click the food items as fast as you can. The buffet gets hectic and the drama gets louder.', opening:'LOLA IS COMING! The buffet is open and the arms are flying.', time:12,
+    setup: ({playArea, setScore, setCombo, setDialogue, setAchievements, addParticle, beep}) => {
+      const foods=['🥟','🍖','🍝','🍗','🍜','🎂']; const spawn = setInterval(()=>{ const food=document.createElement('button'); food.className='game-emoji'; food.textContent=foods[Math.floor(Math.random()*foods.length)]; food.style.position='absolute'; food.style.left=Math.random()*80+'%'; food.style.top=Math.random()*70+'%'; food.style.border='none'; food.style.background='transparent'; food.style.cursor='pointer'; food.addEventListener('click', ()=>{ setScore((s)=>s+1); setCombo((c)=>c+1); addParticle(playArea, 90, 80, '🍽️', 'var(--pink)'); beep(500,0.05,'square',0.06); food.remove(); }); playArea.appendChild(food); setTimeout(()=>food.remove(), 1400); }, 650); return ()=> clearInterval(spawn);
+    },
+    finish: (score)=>({message: score>6 ? 'You conquered the buffet like a true barangay legend.' : 'The buffet gobbled you instead.', achievement: score>6 ? 'Buffet King' : 'Fast Hands'})
+  },
+  {
+    id:'messenger', title:'Messenger Seen Challenge', emoji:'📱', description:'Every choice makes the situation worse.', tutorial:'Choose an answer. No matter what, the drama escalates.', opening:'Asan ka? Pwede pahiram? Nagalit si mama.', time:10,
+    setup: ({playArea, setScore, setCombo, setDialogue, setAchievements, addParticle, beep}) => {
+      const options=['Seen','Ignore','Typing...','Reply after 3 days']; const buttons=document.createElement('div'); buttons.className='arcade-input'; buttons.innerHTML=options.map(o=>`<button class="arcade-btn">${o}</button>`).join(''); playArea.appendChild(buttons); buttons.querySelectorAll('button').forEach((b,i)=>{ b.addEventListener('click', ()=>{ setScore((s)=>s+1); setCombo((c)=>c+1); setDialogue(`${b.textContent} — the drama got worse.`); addParticle(playArea, 120, 60, '📱', 'var(--cyan)'); beep(300,0.06,'triangle',0.06); if(i===3){ setAchievements(['Seen-You-Later']); } }); }); return ()=>{};
+    },
+    finish: (score)=>({message: 'Every ending became worse. Your phone is now a battlefield.', achievement: score>2 ? 'Seen-You-Later' : 'Messenger Survivor'})
+  },
+  {
+    id:'marites', title:'Marites Simulator', emoji:'🗣️', description:'Collect gossip before it disappears.', tutorial:'Tap each rumor bubble before it vanishes. The stories get wilder as you go.', opening:'Rumor. Gossip. Barangay news. National issue. The spiral begins.', time:12,
+    setup: ({playArea, setScore, setCombo, setDialogue, setAchievements, addParticle, beep}) => {
+      const labels=['Rumor','Gossip','Barangay News','National Issue']; const spawn=setInterval(()=>{ const bubble=document.createElement('button'); bubble.className='game-emoji'; bubble.textContent='🗣️'; bubble.style.position='absolute'; bubble.style.left=Math.random()*80+'%'; bubble.style.top=Math.random()*70+'%'; bubble.style.border='none'; bubble.style.background='transparent'; bubble.style.cursor='pointer'; bubble.addEventListener('click', ()=>{ setScore((s)=>s+1); setCombo((c)=>c+1); setDialogue(labels[Math.min(3, Math.floor(score/2))]); addParticle(playArea, 90, 80, '🗣️', 'var(--yellow)'); beep(360,0.05,'sine',0.06); bubble.remove(); }); playArea.appendChild(bubble); setTimeout(()=>bubble.remove(), 900); }, 500); return ()=> clearInterval(spawn);
+    },
+    finish: (score)=>({message: score>6 ? 'Certified Marites. The whole barangay knows your name.' : 'The gossip fizzled out.', achievement: score>6 ? 'Certified Marites' : 'Rumor Collector'})
+  },
+  {
+    id:'pabitin', title:'Pabitin Grabber', emoji:'🎁', description:'Grab prizes from a swinging pabitin.', tutorial:'Tap the falling prizes while the pabitin swings. Rare drops unlock the big achievements.', opening:'The pabitin swings wildly. Everyone is rushing at once.', time:12,
+    setup: ({playArea, setScore, setCombo, setDialogue, setAchievements, addParticle, beep}) => {
+      const prizes=['🍬','🪙','🍜','🍟','🥤','🧴','🥫','🍫','🪥','🧴']; const swing=document.createElement('div'); swing.className='game-emoji'; swing.textContent='🎁'; swing.style.position='absolute'; swing.style.left='45%'; swing.style.top='18px'; playArea.appendChild(swing); const spawn = setInterval(()=>{ const prize=document.createElement('button'); prize.className='game-emoji'; prize.textContent=prizes[Math.floor(Math.random()*prizes.length)]; prize.style.position='absolute'; prize.style.left=Math.random()*80+'%'; prize.style.top='-18px'; prize.style.border='none'; prize.style.background='transparent'; prize.style.cursor='pointer'; prize.addEventListener('click', ()=>{ setScore((s)=>s+1); setCombo((c)=>c+1); addParticle(playArea, 100, 80, '🎁', 'var(--pink)'); beep(600,0.05,'triangle',0.06); prize.remove(); if(score>=8){ setAchievements(['Certified Filipino','Barangay Legend','Pabitin Master']); } }); playArea.appendChild(prize); let y=0; const fall=setInterval(()=>{ y+=5; prize.style.top=y+'px'; if(y>180){ clearInterval(fall); prize.remove(); } }, 28); }, 500); return ()=> clearInterval(spawn);
+    },
+    finish: (score)=>({message: score>8 ? 'Victory! The pabitin is yours, barangay legend.' : 'The rope snapped and the chaos got louder.', achievement: score>8 ? 'Pabitin Master' : 'Certified Filipino'})
+  }
+];
+
+for(const game of games){ arcadeGrid.appendChild(createArcadeCard(game)); }
+
+/* ===================== PHOTO SPIN ===================== */
+document.getElementById('photoCircle').addEventListener('click', (e)=>{
+  e.target.classList.remove('spin');
+  void e.target.offsetWidth;
+  e.target.classList.add('spin');
+  beep(700,0.08,'triangle',0.1);
+});
+
+/* ===================== COUNTDOWN ===================== */
+function renderCountdown(){
+  const grid = document.getElementById('countdownGrid');
+  grid.innerHTML = '';
+  const targetDate = new Date();
+  targetDate.setDate(targetDate.getDate() + 365);
+  function update(){
+    const now = new Date();
+    let diff = Math.max(0, targetDate - now);
+    const days = Math.floor(diff / (1000*60*60*24));
+    const hours = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+    const mins = Math.floor((diff % (1000*60*60)) / (1000*60));
+    const secs = Math.floor((diff % (1000*60)) / 1000);
+    grid.innerHTML = `
+      <div class="cbox"><div class="n">${days}</div><div class="l">Days</div></div>
+      <div class="cbox"><div class="n">${hours}</div><div class="l">Hours</div></div>
+      <div class="cbox"><div class="n">${mins}</div><div class="l">Mins</div></div>
+      <div class="cbox"><div class="n">${secs}</div><div class="l">Secs</div></div>
+    `;
+  }
+  update();
+  setInterval(update, 1000);
+}
+renderCountdown();
+
+/* ===================== FINALE ===================== */
+document.getElementById('finaleBtn').addEventListener('click', ()=>{
+  tada();
+  fireworkBurst(innerWidth*0.3, innerHeight*0.4);
+  setTimeout(()=> fireworkBurst(innerWidth*0.7, innerHeight*0.3), 200);
+  setTimeout(()=> fireworkBurst(innerWidth*0.5, innerHeight*0.5), 400);
+  spawnConfetti(200);
+  playHappyBirthdayTune();
+});
+
+/* ===================== SIMPLE "HAPPY BIRTHDAY" TUNE (WebAudio, no external files) ===================== */
+function playHappyBirthdayTune(){
+  const notes = [
+    [261.6,0.3],[261.6,0.2],[293.7,0.5],[261.6,0.5],[349.2,0.5],[329.6,1.0],
+    [261.6,0.3],[261.6,0.2],[293.7,0.5],[261.6,0.5],[392.0,0.5],[349.2,1.0]
+  ];
+  let t = 0;
+  notes.forEach(([freq,dur])=>{
+    setTimeout(()=> beep(freq, dur*0.9, 'sine', 0.12), t*1000);
+    t += dur;
+  });
+}
+
+/* ===================== INITIAL WELCOME BURST ===================== */
+window.addEventListener('load', ()=>{
+  setTimeout(()=>{
+    spawnConfetti(90, innerWidth/2, 0);
+  }, 400);
+});
+</script>
+</body>
+</html>
